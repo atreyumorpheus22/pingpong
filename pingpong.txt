@@ -1,0 +1,114 @@
+
+
+import turtle as t
+
+# Making game window
+wind = t.Screen()
+wind.title("Ping pong game by Mohamed Hamed")
+wind.bgcolor("black")
+wind.setup(width=800, height=600)
+wind.tracer(1)
+
+# racket1
+racket1 = t.Turtle()
+racket1.speed(0)
+racket1.shape("square")
+racket1.shapesize(stretch_len=1, stretch_wid=5)
+racket1.color("Blue")
+racket1.penup()
+racket1.goto(-350, 0)
+# racket2
+racket2 = t.Turtle()
+racket2.speed(0)
+racket2.shape("square")
+racket2.shapesize(stretch_len=1, stretch_wid=5)
+racket2.color("Red")
+racket2.penup()
+racket2.goto(350, 0)
+#ball
+ball = t.Turtle()
+ball.speed(0)
+ball.shape("square")
+ball.color("White")
+ball.penup()
+ball.goto(0, 0)
+ball.dx = 2.5
+ball.dy = 2.5
+
+# Score
+score1 = 0
+score2 = 0
+score = t.Turtle()
+score.speed(0)
+score.color("White")
+score.penup()
+score.hideturtle()
+score.goto(0, 260)
+score.write("Player 1: {} Player 2: {}".format(score1, score2), align="center", font=("Courier", 24, "normal"))
+
+
+# Functions
+def racket1_up():
+    y1 = racket1.ycor()
+    y1 += 20
+    racket1.sety(y1)
+
+def racket1_down():
+    y1 = racket1.ycor()
+    y1 -= 20
+    racket1.sety(y1)
+
+def racket2_up():
+    y2 = racket2.ycor()
+    y2 += 20
+    racket2.sety(y2)
+
+def racket2_down():
+    y2 = racket2.ycor()
+    y2 -= 20
+    racket2.sety(y2)
+
+# Keyboard Bindings
+wind.listen()
+wind.onkeypress(racket1_up, "w")
+wind.onkeypress(racket1_down, "s")
+wind.onkeypress(racket2_up, "i")
+wind.onkeypress(racket2_down, "k")
+
+# Main game loop
+while True:
+    wind.update()  # Updates the screen everytime loop runs
+    # Ball moves
+    
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
+    # Check Border
+    if ball.ycor() > 290:
+        ball.sety(290)
+        ball.dy *= -1
+
+    if ball.ycor() < -290:
+        ball.sety(-290)
+        ball.dy *= -1
+
+    if ball.xcor() > 390:
+        score1 += 1
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score.clear()
+        score.write("Player 1: {} Player 2: {}".format(score1, score2), align="center", font=("Courier", 24, "normal"))
+
+    if ball.xcor() < -390:
+        score2 += 1
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score.clear()
+        score.write("Player 1: {} Player 2: {}".format(score1, score2), align="center", font=("Courier", 24, "normal"))
+
+    # Ball collision with rackets
+    if (ball.xcor() > 330 and ball.xcor() < 350 and ball.ycor() < racket2.ycor() + 40 and ball.ycor() > racket2.ycor() - 40):
+        ball.setx(330)
+        ball.dx *= -1
+    if (ball.xcor() < -330 and ball.xcor() > -350 and ball.ycor() < racket1.ycor() + 40 and ball.ycor() > racket1.ycor() - 40):
+        ball.setx(-330)
+        ball.dx *= -1
